@@ -5,8 +5,16 @@ import wikipedia
 import smtplib
 import webbrowser as wb
 import os
+import scrap_covid
 
 engine=pyttsx3.init()
+allStateData= scrap_covid.getAllStateCovidData()
+
+def speakActiveCases(stateName):
+    activeCases = allStateData.get(stateName).get('activeCases').get('total')
+    
+    speak('the active cases are')
+    speak(activeCases)
 
 def speak(audio):
     engine.say(audio)
@@ -70,7 +78,7 @@ def senEmail(to,content):
     server.close()
 
 if __name__ == "__main__":
-   # wishme()
+    wishme()
     while True:
         query = takeCommand().lower()
         if 'time' in query:
@@ -106,8 +114,6 @@ if __name__ == "__main__":
         elif 'logout' in query:
             os.system("shutdown -1")
 
-        elif 'restart' in query:
-            os.system("shutdown /r /t 1")
 
         elif 'shutdown' in query:
             os.system("shutdown /s /t 1")
@@ -127,7 +133,12 @@ if __name__ == "__main__":
                 else:
                     speak("can you please repeat the statement.")
 
+        elif 'get corona count' in query:
+            speak('In which state sir ?')
+            data=takeCommand()
+            speakActiveCases(data)
+            
+
         elif 'stop' in query:
             speak("Exiting sir.")
             quit()
-
